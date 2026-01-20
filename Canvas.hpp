@@ -45,7 +45,7 @@ public:
     }
 
     // --------------------
-    // INTERFACE
+    // STRUCTURE
     // --------------------
 
     struct Cursor { //just focus about movement for now

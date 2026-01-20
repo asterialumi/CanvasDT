@@ -14,7 +14,7 @@ int main() {
 
     auto cursor = page.position(0); = position mark
 
-    (auto is Canvas::Cursor)
+    (auto is Canvas<T>::Cursor)
 
     auto stack = page.last();
     auto queue = page.first();
