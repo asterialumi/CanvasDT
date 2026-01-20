@@ -70,5 +70,15 @@ int main() {
 
     test.hold(test.begin(), test.end()).erase(2);
     test.display();
+
+    //cursor chaining
+    auto cursor = test.position(0);
+    cursor.insert(4)
+          .insert(9)
+          .insert(16)
+          .insert(25);
+
+    test.display();
+
     return 0;
 }
