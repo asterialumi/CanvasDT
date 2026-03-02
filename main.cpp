@@ -44,7 +44,6 @@ int main() {
 
     Canvas<int> page2(5); //constructing Canvas with size 5
     Canvas<int> page3(5,100); //constructing Canvas with 5 100s
-    Canvas<> page4;
     std::cout << "page 2 size: " << page2.size() << std::endl;
     page2.display();
     page3.display();
