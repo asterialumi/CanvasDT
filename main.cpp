@@ -2,7 +2,7 @@
 #include "Canvas.hpp"
 #include <iostream>
 //#include <print>
-
+using namespace lumi;
 
 int main() {
     /*
