@@ -1,7 +1,13 @@
 #pragma once
-#include "Canvas.hpp"
 
 namespace lumi {
+    template<typename T> class Locus;
+
+    template<typename T>
+    class Tree {
+        Locus<T>& source;
+
+    };
     //ListView();
     //TreeView();
     //GraphView();

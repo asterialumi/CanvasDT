@@ -3,23 +3,25 @@
 #include <new>
 #include <utility>
 #include <cassert>
-#include "Views.hpp"
 
 using log_t = unsigned int;
 
 namespace lumi {
-    template<typename T>
-    class Canvas {
-    public:
+    template<typename T> struct Point;
+    template<typename T> struct Chain;
 
+    template<typename T>
+    class Locus {
+    public:
         // --------------------
         // CREATION
         // --------------------
-        Canvas(): Canvas(0) {}
-        
-        Canvas(size_t init_size): Canvas(init_size, {}) {}
 
-        Canvas(size_t init_size, T val) {
+        Locus(): Locus(0) {}
+        
+        Locus(size_t init_size): Locus(init_size, {}) {}
+
+        Locus(size_t init_size, T val) {
             if(init_size > 0) {
                 reserve(init_size);
                 for(size_t i = 0; i < init_size; i++) {
@@ -31,78 +33,27 @@ namespace lumi {
         }
         
         //DESTRUCTOR
-        ~Canvas() noexcept {
+        ~Locus() noexcept {
             clear();
             ::operator delete(data);
         }
-
-        // --------------------
-        // STRUCTURE
-        // --------------------
-
-        struct Cursor { //just focus about movement for now
-            Canvas<T>* owner;
-            size_t pos;
-
-            Cursor(Canvas<T>* owner, size_t pos): owner(owner), pos(pos) {}
-
-            Cursor insert()       { owner->add_at(pos, {}); return *this; }
-            Cursor insert(T val) { owner->add_at(pos, val); return *this; }
-            void erase()          { owner->remove_at(pos); }
-        };
-
-        struct Range {
-            Cursor start;
-            Cursor finish;
-
-            Range(Cursor start, Cursor finish): start(start), finish(finish) {
-                assert(start.owner == finish.owner); //throw-->DifferentOwners
-                assert(start.pos <= finish.pos); //throw-->InvalidRange
-            }
-
-            void insert() {
-                for(size_t i = start.pos; i <= finish.pos; i++) {
-                    start.owner->add_at(i, {});
-                }
-            }
-            
-            void insert(T val) {
-                for(size_t i = start.pos; i <= finish.pos; i++) {
-                    start.owner->add_at(i, val);
-                }
-            }
-
-            void erase() {
-                for(size_t i = finish.pos+1; i-- > start.pos;) {
-                    start.owner->remove_at(i);
-                }
-            }
-
-            void erase(T val) {
-                for(size_t i = finish.pos+1; i-- > start.pos;) {
-                    if(start.owner->data[i] == val) {
-                        start.owner->remove_at(i);
-                    }
-                }
-            }
-        };
 
         // --------------------
         // FUNCTIONS
         // --------------------
 
         //INSERT
-        Cursor insert() { return insert({}); }
-        Cursor insert(T val) {
+        Point<T> insert() { return insert({}); }
+        Point<T> insert(T val) {
             add_at(_size, val);
-            return position(_size - 1);
+            return at(_size - 1);
         }
 
         template<typename... Args>
-        Cursor build(Args&&... args) {
+        Point<T> build(Args&&... args) {
             if(_size == _capacity) grow(1.6);
             new (&data[_size++]) T(std::forward<Args>(args)...);
-            return position(_size - 1);
+            return at(_size - 1);
         }
 
         //REMOVE
@@ -137,18 +88,18 @@ namespace lumi {
             return data[index];
         }
 
-        T first()          { return operator[](0); }
-        T last()           { return operator[](_size-1); }
+        T first()            { return operator[](0); }
+        T last()             { return operator[](_size-1); }
         size_t size()        { return _size; }
         size_t capacity()    { return _capacity; }
         log_t allocations()  { return _allocations; }
 
         //MOVEMENT
-        Cursor position(size_t index) { return Cursor{ this, index }; }
-        Range hold(Cursor begin, Cursor end) { return { begin, end }; }
+        Point<T> at(size_t index) { return Point{ this, index }; }
+        Chain<T> range(Point<T> begin, Point<T> end) { return { begin, end }; }
 
-        Cursor begin() { return position(0); }
-        Cursor end()   { return position(_size - 1); }
+        Point<T> begin() { return at(0); }
+        Point<T> end()   { return at(_size - 1); }
 
         //UTILITY
         void display() const {
@@ -170,12 +121,20 @@ namespace lumi {
             _capacity = memory;
             data = allocate(data, _capacity);
         }
-
+        
+        template<template<typename> typename AspectType>
+        auto view() {
+            return AspectType<T> { *this };
+        }
     private:
         // --------------------
         // VARIABLES
         // --------------------
-        T*    data{};
+        T* data{};
+
+        friend struct Point<T>;
+        friend struct Chain<T>;
+    
         size_t _size{};
         size_t _capacity{};
         log_t  _allocations{};
@@ -189,9 +148,6 @@ namespace lumi {
             if(factor - static_cast<int>(factor) > 0.5) factor++;
             _capacity = _capacity == 0 ? 2 : factor;
             data = allocate(data, _capacity);
-            
-            //DEBUG
-            //std::cout << "grow:" << _size << "/" << _capacity << std::endl;
         }
 
         T* allocate(T* origin, size_t memory) {
@@ -235,3 +191,6 @@ namespace lumi {
         }
     };
 }
+
+#include "Traces.hpp"
+#include "Aspects.hpp"

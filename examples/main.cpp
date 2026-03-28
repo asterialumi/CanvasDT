@@ -1,10 +1,11 @@
 // #include "CursorArray.hpp"
-#include "Canvas.hpp"
+#include "../include/lumi/Locus.hpp"
 #include <iostream>
-//#include <print>
+#include <print>
 using namespace lumi;
 
 int main() {
+    std::print("Success! You are now using C++23 on GCC 15.\n");
     /*
     Capabilities I want:
 
@@ -30,20 +31,20 @@ int main() {
 
     */
 
-    Canvas<int> page;
+    Locus<int> page;
     page.insert(10);
     page.insert();
-    page.position(1).insert(5);
-    Canvas<int>::Cursor start = page.position(0);
+    page.at(1).insert(5);
+    Point<int> start = page.at(0);
     start.insert(15);
     start.insert(20);
     page.display();
 
-    page.position(2); //returns non-void
+    page.at(2); //returns non-void
     std::cout << std::endl << "did it work wtf" << std::endl; //testing if not assigning a function returning non-void works, it did
 
-    Canvas<int> page2(5); //constructing Canvas with size 5
-    Canvas<int> page3(5,100); //constructing Canvas with 5 100s
+    Locus<int> page2(5); //constructing Canvas with size 5
+    Locus<int> page3(5,100); //constructing Canvas with 5 100s
     std::cout << "page 2 size: " << page2.size() << std::endl;
     page2.display();
     page3.display();
@@ -57,21 +58,21 @@ int main() {
 
     //std::cout << page; this does NOT work
     
-    Canvas<int> test;
+    Locus<int> test;
     for(int i = 0; i < 5; i++) test.insert(i+1);
     std::cout << "Before hold: ";
     test.display();
 
-    test.hold(test.begin(), test.end()).insert(2);
+    test.range(test.begin(), test.end()).insert(2);
 
     std::cout << std::endl << "After hold: ";
     test.display();
 
-    test.hold(test.begin(), test.end()).erase(2);
+    test.range(test.begin(), test.end()).erase(2);
     test.display();
 
     //cursor chaining
-    auto cursor = test.position(0);
+    auto cursor = test.at(0);
     cursor.insert(4)
           .insert(9)
           .insert(16)
