@@ -63,12 +63,12 @@ int main() {
     std::cout << "Before hold: ";
     test.display();
 
-    test.range(test.begin(), test.end()).insert(2);
+    test.trace(test.begin(), test.end()).insert(2);
 
     std::cout << std::endl << "After hold: ";
     test.display();
 
-    test.range(test.begin(), test.end()).erase(2);
+    test.trace(test.begin(), test.end()).erase(2);
     test.display();
 
     //cursor chaining

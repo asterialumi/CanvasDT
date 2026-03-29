@@ -96,7 +96,7 @@ namespace lumi {
 
         //MOVEMENT
         Point<T> at(size_t index) { return Point{ this, index }; }
-        Chain<T> range(Point<T> begin, Point<T> end) { return { begin, end }; }
+        Chain<T> trace(Point<T> begin, Point<T> end) { return { begin, end }; }
 
         Point<T> begin() { return at(0); }
         Point<T> end()   { return at(_size - 1); }

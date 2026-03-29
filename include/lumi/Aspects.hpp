@@ -4,7 +4,7 @@ namespace lumi {
     template<typename T> class Locus;
 
     template<typename T>
-    class List {
+    class List { //Doubly-linked List, can be Circular
     public:
         
     private:
@@ -13,7 +13,7 @@ namespace lumi {
     };
 
     template<typename T>
-    class Tree {
+    class Tree { //n-ary tree, n can be restricted to a number, for instance 2 (binary tree)
     public:
         
     private:
@@ -21,8 +21,18 @@ namespace lumi {
         
     };
 
+    template<typename T, typename W = void>
+    class Graph { //unweighted by default
+    public:
+        
+    private:
+        Locus<T>& source;
+        Locus<W> edges;
+        
+    };
+
     template<typename T>
-    class Graph {
+    class Graph<T,void> { //weighted version
     public:
         
     private:
@@ -30,12 +40,13 @@ namespace lumi {
         
     };
 
-    template<typename T>
+    template<typename K, typename V>
     class Map {
     public:
         
     private:
-        Locus<T>& source;
+        Locus<K> keys;
+        Locus<V>& values;
         
     };
 
@@ -48,13 +59,14 @@ namespace lumi {
         
     };
 
+    /*
+    set = hashset
+    bag = hash multiset
+    flow = ordered set
 
-    //ListView();
-    //TreeView();
-    //GraphView();
-    //MapView();
-    //HeapView();
-    //SetView();
+    map = unordered map
+
+    */
 }
 
 //DONE

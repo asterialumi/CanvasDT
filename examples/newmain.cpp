@@ -29,7 +29,7 @@ int main() {
     space();
 
     std::cout << "INSERT W/ RANGE: " << std::endl;
-    locus.range(locus.begin(), locus.at(5)).insert(2);
+    locus.trace(locus.begin(), locus.at(5)).insert(2);
     locus.display();
 
     space();
@@ -42,7 +42,7 @@ int main() {
     space();
     
     std::cout << "ERASE W/ RANGE: " << std::endl;
-    locus.range(locus.at(2), locus.end()).erase(2);
+    locus.trace(locus.at(2), locus.end()).erase(2);
     locus.display();
 
     space();
